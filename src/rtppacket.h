@@ -1,7 +1,7 @@
 /*
 
   This file is a part of JRTPLIB
-  Copyright (c) 1999-2016 Jori Liesenborgs
+  Copyright (c) 1999-2017 Jori Liesenborgs
 
   Contact: jori.liesenborgs@gmail.com
 
@@ -55,6 +55,7 @@ class RTPRawPacket;
  */
 class JRTPLIB_IMPORTEXPORT RTPPacket : public RTPMemoryObject
 {
+	JRTPLIB_NO_COPY(RTPPacket)
 public:
 	/** Creates an RTPPacket instance based upon the data in \c rawpack, optionally installing a memory manager.
 	 *  Creates an RTPPacket instance based upon the data in \c rawpack, optionally installing a memory manager. 

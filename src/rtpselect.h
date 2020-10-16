@@ -1,7 +1,7 @@
 /*
 
   This file is a part of JRTPLIB
-  Copyright (c) 1999-2016 Jori Liesenborgs
+  Copyright (c) 1999-2017 Jori Liesenborgs
 
   Contact: jori.liesenborgs@gmail.com
 
@@ -48,6 +48,7 @@
 
 #ifndef RTP_HAVE_WSAPOLL
 #include <poll.h>
+#include <errno.h>
 #endif // !RTP_HAVE_WSAPOLL
 
 #include <vector>
@@ -82,11 +83,18 @@ inline int RTPSelect(const SocketType *sockets, int8_t *readflags, size_t numsoc
 
 #ifdef RTP_HAVE_WSAPOLL
 	int status = WSAPoll(&(fds[0]), (ULONG)numsocks, timeoutmsec);
-#else
-	int status = poll(&(fds[0]), numsocks, timeoutmsec);
-#endif // RTP_HAVE_WSAPOLL
 	if (status < 0)
 		return ERR_RTP_SELECT_ERRORINPOLL;
+#else
+	int status = poll(&(fds[0]), numsocks, timeoutmsec);
+	if (status < 0)
+	{
+		// We're just going to ignore an EINTR
+		if (errno == EINTR)
+			return 0;
+		return ERR_RTP_SELECT_ERRORINPOLL;
+	}
+#endif // RTP_HAVE_WSAPOLL
 
 	if (status > 0)
 	{
@@ -107,6 +115,7 @@ inline int RTPSelect(const SocketType *sockets, int8_t *readflags, size_t numsoc
 #include <sys/select.h>
 #include <sys/time.h>
 #include <sys/types.h>
+#include <errno.h>
 #endif // !RTP_SOCKETTYPE_WINSOCK
 
 namespace jrtplib
@@ -138,10 +147,10 @@ inline int RTPSelect(const SocketType *sockets, int8_t *readflags, size_t numsoc
 	FD_ZERO(&fdset);
 	for (size_t i = 0 ; i < numsocks ; i++)
 	{
+#ifndef RTP_SOCKETTYPE_WINSOCK
 		const int setsize = FD_SETSIZE;
 		// On windows it seems that comparing the socket value to FD_SETSIZE does
 		// not make sense
-#ifndef RTP_SOCKETTYPE_WINSOCK
 		if (sockets[i] >= setsize)
 			return ERR_RTP_SELECT_SOCKETDESCRIPTORTOOLARGE;
 #endif // RTP_SOCKETTYPE_WINSOCK
@@ -150,8 +159,18 @@ inline int RTPSelect(const SocketType *sockets, int8_t *readflags, size_t numsoc
 	}
 
 	int status = select(FD_SETSIZE, &fdset, 0, 0, pTv);
+#ifdef RTP_SOCKETTYPE_WINSOCK
 	if (status < 0)
 		return ERR_RTP_SELECT_ERRORINSELECT;
+#else
+	if (status < 0)
+	{
+		// We're just going to ignore an EINTR
+		if (errno == EINTR)
+			return 0;
+		return ERR_RTP_SELECT_ERRORINSELECT;
+	}
+#endif // RTP_HAVE_WSAPOLL
 
 	if (status > 0) // some descriptors were set, check them
 	{

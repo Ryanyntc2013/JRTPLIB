@@ -1,7 +1,7 @@
 /*
 
   This file is a part of JRTPLIB
-  Copyright (c) 1999-2016 Jori Liesenborgs
+  Copyright (c) 1999-2017 Jori Liesenborgs
 
   Contact: jori.liesenborgs@gmail.com
 
@@ -77,6 +77,7 @@ bool RTPByteAddress::IsFromSameHost(const RTPAddress *addr) const
 
 RTPAddress *RTPByteAddress::CreateCopy(RTPMemoryManager *mgr) const
 {
+	JRTPLIB_UNUSED(mgr); // possibly unused
 	RTPByteAddress *a = RTPNew(mgr, RTPMEM_TYPE_CLASS_RTPADDRESS) RTPByteAddress(hostaddress, addresslength, port);
 	return a;
 }

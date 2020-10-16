@@ -1,7 +1,7 @@
 /*
 
   This file is a part of JRTPLIB
-  Copyright (c) 1999-2016 Jori Liesenborgs
+  Copyright (c) 1999-2017 Jori Liesenborgs
 
   Contact: jori.liesenborgs@gmail.com
 
@@ -70,6 +70,7 @@ bool RTPIPv4Address::IsFromSameHost(const RTPAddress *addr) const
 
 RTPAddress *RTPIPv4Address::CreateCopy(RTPMemoryManager *mgr) const
 {
+	JRTPLIB_UNUSED(mgr); // possibly unused
 	RTPIPv4Address *a = RTPNew(mgr,RTPMEM_TYPE_CLASS_RTPADDRESS) RTPIPv4Address(ip,port);
 	return a;
 }

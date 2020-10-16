@@ -1,7 +1,7 @@
 /*
 
   This file is a part of JRTPLIB
-  Copyright (c) 1999-2016 Jori Liesenborgs
+  Copyright (c) 1999-2017 Jori Liesenborgs
 
   Contact: jori.liesenborgs@gmail.com
 
@@ -52,6 +52,7 @@ namespace jrtplib
 template<class Key,class Element,class GetIndex,int hashsize>
 class RTPKeyHashTable : public RTPMemoryObject
 {
+	JRTPLIB_NO_COPY(RTPKeyHashTable)
 public:
 	RTPKeyHashTable(RTPMemoryManager *mgr = 0,int memtype = RTPMEM_TYPE_OTHER);
 	~RTPKeyHashTable()					{ Clear(); }
@@ -105,6 +106,8 @@ private:
 template<class Key,class Element,class GetIndex,int hashsize>
 inline RTPKeyHashTable<Key,Element,GetIndex,hashsize>::RTPKeyHashTable(RTPMemoryManager *mgr,int memtype) : RTPMemoryObject(mgr)
 {
+	JRTPLIB_UNUSED(memtype); // possibly unused
+
 	for (int i = 0 ; i < hashsize ; i++)
 		table[i] = 0;
 	firsthashelem = 0;

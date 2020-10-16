@@ -1,7 +1,7 @@
 /*
 
   This file is a part of JRTPLIB
-  Copyright (c) 1999-2016 Jori Liesenborgs
+  Copyright (c) 1999-2017 Jori Liesenborgs
 
   Contact: jori.liesenborgs@gmail.com
 
@@ -56,6 +56,7 @@ class RTCPScheduler;
 
 class JRTPLIB_IMPORTEXPORT RTPPollThread : private jthread::JThread
 {
+	JRTPLIB_NO_COPY(RTPPollThread)
 public:
 	RTPPollThread(RTPSession &session,RTCPScheduler &rtcpsched);
 	~RTPPollThread();

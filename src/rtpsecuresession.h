@@ -1,7 +1,7 @@
 /*
 
   This file is a part of JRTPLIB
-  Copyright (c) 1999-2016 Jori Liesenborgs
+  Copyright (c) 1999-2017 Jori Liesenborgs
 
   Contact: jori.liesenborgs@gmail.com
 
@@ -40,7 +40,7 @@
 
 #include "rtpconfig.h"
 
-#ifdef RTP_SUPPORT_SRTP
+#if defined(RTP_SUPPORT_SRTP) || defined(RTP_SUPPORT_SRTP2)
 
 #include "rtpsession.h"
 
@@ -48,7 +48,12 @@
 	#include <jthread/jthread.h>
 #endif // RTP_SUPPORT_THREAD
 
+#ifdef RTP_SUPPORT_SRTP2
+struct srtp_ctx_t_;
+typedef struct srtp_ctx_t_ srtp_ctx_t;
+#else
 struct srtp_ctx_t;
+#endif
 
 namespace jrtplib
 {
@@ -106,7 +111,7 @@ protected:
 	/** In case the reimplementation of OnChangeIncomingData (which may take place
 	 *  in a background thread) encounters an error, this member function will be
 	 *  called; implement it in a derived class to receive notification of this. */
-	virtual void OnErrorChangeIncomingData(int errcode, int libsrtperrorcode) { }
+	virtual void OnErrorChangeIncomingData(int errcode, int libsrtperrorcode);
 
 	int OnChangeRTPOrRTCPData(const void *origdata, size_t origlen, bool isrtp, void **senddata, size_t *sendlen);
 	bool OnChangeIncomingData(RTPRawPacket *rawpack);
@@ -122,9 +127,11 @@ private:
 #endif // RTP_SUPPORT_THREAD
 };
 
+inline void RTPSecureSession::OnErrorChangeIncomingData(int, int) { }
+
 } // end namespace
 
-#endif // RTP_SUPPORT_SRTP
+#endif // RTP_SUPPORT_SRTP || RTP_SUPPORT_SRTP2
 
 #endif // RTPSECURESESSION_H
 

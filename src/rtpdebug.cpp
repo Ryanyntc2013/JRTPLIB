@@ -1,7 +1,7 @@
 /*
 
   This file is a part of JRTPLIB
-  Copyright (c) 1999-2016 Jori Liesenborgs
+  Copyright (c) 1999-2017 Jori Liesenborgs
 
   Contact: jori.liesenborgs@gmail.com
 
@@ -103,7 +103,7 @@ public:
 
 static MemoryTracker memtrack;
 
-void *donew(size_t s,char filename[],int line)
+void *donew(size_t s,const char *filename,int line)
 {	
 #ifdef RTP_SUPPORT_THREAD
 	JMutexAutoLock l(mutex);

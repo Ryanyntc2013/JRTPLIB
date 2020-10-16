@@ -1,3 +1,4 @@
+
 For v3:
  * Look into bug where lastmsgtime = srcdat->INF_GetLastMessageTime() was somehow 
    negative

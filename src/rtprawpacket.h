@@ -1,7 +1,7 @@
 /*
 
   This file is a part of JRTPLIB
-  Copyright (c) 1999-2016 Jori Liesenborgs
+  Copyright (c) 1999-2017 Jori Liesenborgs
 
   Contact: jori.liesenborgs@gmail.com
 
@@ -43,6 +43,7 @@
 #include "rtpaddress.h"
 #include "rtptypes.h"
 #include "rtpmemoryobject.h"
+#include "rtpstructs.h"
 
 namespace jrtplib
 {
@@ -50,15 +51,27 @@ namespace jrtplib
 /** This class is used by the transmission component to store the incoming RTP and RTCP data in. */
 class JRTPLIB_IMPORTEXPORT RTPRawPacket : public RTPMemoryObject
 {
+	JRTPLIB_NO_COPY(RTPRawPacket)
 public:	
-    	/** Creates an instance which stores data from \c data with length \c datalen.
+    /** Creates an instance which stores data from \c data with length \c datalen.
 	 *  Creates an instance which stores data from \c data with length \c datalen. Only the pointer 
 	 *  to the data is stored, no actual copy is made! The address from which this packet originated 
 	 *  is set to \c address and the time at which the packet was received is set to \c recvtime. 
-	 *  The flag which indicates whether this data is RTP or RTCP data is set to \c rtp. A memory
-	 *  manager can be installed as well.
+	 *  The flag which indicates whether this data is RTP or RTCP data is set to \c rtp.
+	 *  If you don't know if it's an RTP or RTCP packet, you can use the other constructor which
+	 *  tries to determine the type based on the header. A memory manager can be installed as well.
 	 */
 	RTPRawPacket(uint8_t *data,size_t datalen,RTPAddress *address,RTPTime &recvtime,bool rtp,RTPMemoryManager *mgr = 0);
+
+    /** Creates an instance which stores data from \c data with length \c datalen.
+	 *  Creates an instance which stores data from \c data with length \c datalen. Only the pointer 
+	 *  to the data is stored, no actual copy is made! The address from which this packet originated 
+	 *  is set to \c address and the time at which the packet was received is set to \c recvtime. 
+	 *  A memory manager can be installed as well. This is similar to the other constructor where
+	 *  you have to specify yourself if the packet is supposed to contain RTP or RTCP data. In this version,
+	 *  based on the header information the packet type will be determined.
+	 */
+	RTPRawPacket(uint8_t *data,size_t datalen,RTPAddress *address,RTPTime &recvtime,RTPMemoryManager *mgr = 0);
 	~RTPRawPacket();
 	
 	/** Returns the pointer to the data which is contained in this packet. */
@@ -115,6 +128,23 @@ inline RTPRawPacket::RTPRawPacket(uint8_t *data,size_t datalen,RTPAddress *addre
 	isrtp = rtp;
 }
 
+inline RTPRawPacket::RTPRawPacket(uint8_t *data,size_t datalen,RTPAddress *address,RTPTime &recvtime,RTPMemoryManager *mgr):RTPMemoryObject(mgr),receivetime(recvtime)
+{
+	packetdata = data;
+	packetdatalength = datalen;
+	senderaddress = address;
+
+	isrtp = true;
+	if (datalen >= sizeof(RTCPCommonHeader))
+	{
+		RTCPCommonHeader *rtcpheader = (RTCPCommonHeader *)data;
+		uint8_t packettype = rtcpheader->packettype;
+
+		if (packettype >= 200 && packettype <= 204)
+			isrtp = false;
+	}
+}
+
 inline RTPRawPacket::~RTPRawPacket()
 {
 	DeleteData();
@@ -133,6 +163,7 @@ inline void RTPRawPacket::DeleteData()
 
 inline uint8_t *RTPRawPacket::AllocateBytes(bool isrtp, int recvlen) const
 {
+	JRTPLIB_UNUSED(isrtp); // possibly unused
 	return RTPNew(GetMemoryManager(),(isrtp)?RTPMEM_TYPE_BUFFER_RECEIVEDRTPPACKET:RTPMEM_TYPE_BUFFER_RECEIVEDRTCPPACKET) uint8_t[recvlen];
 }
 

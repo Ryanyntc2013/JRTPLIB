@@ -1,7 +1,7 @@
 /*
 
   This file is a part of JRTPLIB
-  Copyright (c) 1999-2016 Jori Liesenborgs
+  Copyright (c) 1999-2017 Jori Liesenborgs
 
   Contact: jori.liesenborgs@gmail.com
 
@@ -78,6 +78,8 @@ namespace jrtplib
 void RTPSourceStats::ProcessPacket(RTPPacket *pack,const RTPTime &receivetime,double tsunit,
                                    bool ownpacket,bool *accept,bool applyprobation,bool *onprobation)
 {
+	JRTPLIB_UNUSED(applyprobation); // possibly unused
+
 	// Note that the sequence number in the RTP packet is still just the
 	// 16 bit number contained in the RTP header
 

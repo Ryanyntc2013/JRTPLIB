@@ -1,7 +1,7 @@
 /*
 
   This file is a part of JRTPLIB
-  Copyright (c) 1999-2016 Jori Liesenborgs
+  Copyright (c) 1999-2017 Jori Liesenborgs
 
   Contact: jori.liesenborgs@gmail.com
 
@@ -305,7 +305,13 @@ int RTPTCPTransmitter::Poll()
 			if (status == ERR_RTP_OUTOFMEM)
 				break;
 			else
+			{
 				errSockets.push_back(sock);
+				// Don't let this count as an error (due to a closed connection for example),
+				// otherwise the poll thread (if used) will stop because of this. Since there
+				// may be more than one connection, that's not desirable in general.
+				status = 0; 
+			}
 		}
 		++it;
 	}
@@ -757,125 +763,7 @@ int RTPTCPTransmitter::PollSocket(SocketType sock, SocketData &sdata)
 #ifdef RTPDEBUG
 void RTPTCPTransmitter::Dump()
 {
-	/*
-	if (!m_init)
-		std::cout << "Not initialized" << std::endl;
-	else
-	{
-		MAINMUTEX_LOCK
-	
-		if (!m_created)
-			std::cout << "Not created" << std::endl;
-		else
-		{
-			char str[16];
-			uint32_t ip;
-			std::list<uint32_t>::const_iterator it;
-			
-			std::cout << "RTP Port:                       " << m_rtpPort << std::endl;
-			std::cout << "RTCP Port:                      " << m_rtcpPort << std::endl;
-			std::cout << "RTP socket descriptor:          " << rtpsock << std::endl;
-			std::cout << "RTCP socket descriptor:         " << rtcpsock << std::endl;
-			ip = mcastifaceIP;
-			RTP_SNPRINTF(str,16,"%d.%d.%d.%d",(int)((ip>>24)&0xFF),(int)((ip>>16)&0xFF),(int)((ip>>8)&0xFF),(int)(ip&0xFF));
-			std::cout << "Multicast interface IP address: " << str << std::endl;
-			std::cout << "Local IP addresses:" << std::endl;
-			for (it = localIPs.begin() ; it != localIPs.end() ; it++)
-			{
-				ip = (*it);
-				RTP_SNPRINTF(str,16,"%d.%d.%d.%d",(int)((ip>>24)&0xFF),(int)((ip>>16)&0xFF),(int)((ip>>8)&0xFF),(int)(ip&0xFF));
-				std::cout << "    " << str << std::endl;
-			}
-			std::cout << "Multicast TTL:                  " << (int)multicastTTL << std::endl;
-			std::cout << "Receive mode:                   ";
-			switch (receivemode)
-			{
-			case RTPTransmitter::AcceptAll:
-				std::cout << "Accept all";
-				break;
-			case RTPTransmitter::AcceptSome:
-				std::cout << "Accept some";
-				break;
-			case RTPTransmitter::IgnoreSome:
-				std::cout << "Ignore some";
-			}
-			std::cout << std::endl;
-			if (receivemode != RTPTransmitter::AcceptAll)
-			{
-				acceptignoreinfo.GotoFirstElement();
-				while(acceptignoreinfo.HasCurrentElement())
-				{
-					ip = acceptignoreinfo.GetCurrentKey();
-					RTP_SNPRINTF(str,16,"%d.%d.%d.%d",(int)((ip>>24)&0xFF),(int)((ip>>16)&0xFF),(int)((ip>>8)&0xFF),(int)(ip&0xFF));
-					PortInfo *pinfo = acceptignoreinfo.GetCurrentElement();
-					std::cout << "    " << str << ": ";
-					if (pinfo->all)
-					{
-						std::cout << "All ports";
-						if (!pinfo->portlist.empty())
-							std::cout << ", except ";
-					}
-					
-					std::list<uint16_t>::const_iterator it;
-					
-					for (it = pinfo->portlist.begin() ; it != pinfo->portlist.end() ; )
-					{
-						std::cout << (*it);
-						it++;
-						if (it != pinfo->portlist.end())
-							std::cout << ", ";
-					}
-					std::cout << std::endl;
-				}
-			}
-			
-			std::cout << "Local host name:                ";
-			if (localhostname == 0)
-				std::cout << "Not set";
-			else
-				std::cout << localhostname;
-			std::cout << std::endl;
-
-			std::cout << "List of destinations:           ";
-			destinations.GotoFirstElement();
-			if (destinations.HasCurrentElement())
-			{
-				std::cout << std::endl;
-				do
-				{
-					std::cout << "    " << destinations.GetCurrentElement().GetDestinationString() << std::endl;
-					destinations.GotoNextElement();
-				} while (destinations.HasCurrentElement());
-			}
-			else
-				std::cout << "Empty" << std::endl;
-		
-			std::cout << "Supports multicasting:          " << ((supportsmulticasting)?"Yes":"No") << std::endl;
-#ifdef RTP_SUPPORT_IPV4MULTICAST
-			std::cout << "List of multicast groups:       ";
-			multicastgroups.GotoFirstElement();
-			if (multicastgroups.HasCurrentElement())
-			{
-				std::cout << std::endl;
-				do
-				{
-					ip = multicastgroups.GetCurrentElement();
-					RTP_SNPRINTF(str,16,"%d.%d.%d.%d",(int)((ip>>24)&0xFF),(int)((ip>>16)&0xFF),(int)((ip>>8)&0xFF),(int)(ip&0xFF));
-					std::cout << "    " << str << std::endl;
-					multicastgroups.GotoNextElement();
-				} while (multicastgroups.HasCurrentElement());
-			}
-			else
-				std::cout << "Empty" << std::endl;
-#endif // RTP_SUPPORT_IPV4MULTICAST
-			
-			std::cout << "Number of raw packets in queue: " << rawpacketlist.size() << std::endl;
-			std::cout << "Maximum allowed packet size:    " << maxpacksize << std::endl;
-		}
-		
-		MAINMUTEX_UNLOCK
-	}
-*/
+	// TODO
 }
 #endif // RTPDEBUG
 
@@ -899,17 +787,20 @@ int RTPTCPTransmitter::SendRTPRTCPData(const void *data, size_t len)
 	
 	std::map<SocketType, SocketData>::iterator it = m_destSockets.begin();
 	std::map<SocketType, SocketData>::iterator end = m_destSockets.end();
-	int status = 0;
 
 	vector<SocketType> errSockets;
+	int flags = 0;
+#ifdef RTP_HAVE_MSG_NOSIGNAL
+	flags = MSG_NOSIGNAL;
+#endif // RTP_HAVE_MSG_NOSIGNAL
 
 	while (it != end)
 	{
 		uint8_t lengthBytes[2] = { (uint8_t)((len >> 8)&0xff), (uint8_t)(len&0xff) };
 		SocketType sock = it->first;
 
-		if (send(sock,(const char *)lengthBytes,2,0) < 0 ||
-			send(sock,(const char *)data,len,0) < 0)
+		if (send(sock,(const char *)lengthBytes,2,flags) < 0 ||
+			send(sock,(const char *)data,len,flags) < 0)
 			errSockets.push_back(sock);
 		++it;
 	}
@@ -918,13 +809,14 @@ int RTPTCPTransmitter::SendRTPRTCPData(const void *data, size_t len)
 
 	if (errSockets.size() != 0)
 	{
-		status = ERR_RTP_TCPTRANS_ERRORINSEND;
-
 		for (size_t i = 0 ; i < errSockets.size() ; i++)
 			OnSendError(errSockets[i]);
 	}
 
-	return status;
+	// Don't return an error code to avoid the poll thread exiting
+	// due to one closed connection for example
+
+	return 0;
 }
 
 int RTPTCPTransmitter::ValidateSocket(SocketType)
@@ -969,6 +861,8 @@ RTPTCPTransmitter::SocketData::~SocketData()
 
 int RTPTCPTransmitter::SocketData::ProcessAvailableBytes(SocketType sock, int availLen, bool &complete, RTPMemoryManager *pMgr)
 {
+	JRTPLIB_UNUSED(pMgr); // possibly unused
+
 	const int numLengthBuffer = 2;
 	if (m_lengthBufferOffset < numLengthBuffer) // first we need to get the length
 	{

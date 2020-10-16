@@ -1,7 +1,7 @@
 /*
 
   This file is a part of JRTPLIB
-  Copyright (c) 1999-2016 Jori Liesenborgs
+  Copyright (c) 1999-2017 Jori Liesenborgs
 
   Contact: jori.liesenborgs@gmail.com
 
@@ -47,6 +47,7 @@ namespace jrtplib
 
 RTPAddress *RTPIPv6Address::CreateCopy(RTPMemoryManager *mgr) const
 {
+	JRTPLIB_UNUSED(mgr); // possibly unused
 	RTPIPv6Address *newaddr = RTPNew(mgr,RTPMEM_TYPE_CLASS_RTPADDRESS) RTPIPv6Address(ip,port);
 	return newaddr;
 }

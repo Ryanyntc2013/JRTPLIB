@@ -1,7 +1,7 @@
 /*
 
   This file is a part of JRTPLIB
-  Copyright (c) 1999-2016 Jori Liesenborgs
+  Copyright (c) 1999-2017 Jori Liesenborgs
 
   Contact: jori.liesenborgs@gmail.com
 
@@ -73,6 +73,7 @@ class RTPSourceData;
  */
 class JRTPLIB_IMPORTEXPORT RTPSources : public RTPMemoryObject
 {
+	JRTPLIB_NO_COPY(RTPSources)
 public:
 	/** Type of probation to use for new sources. */
 	enum ProbationType 

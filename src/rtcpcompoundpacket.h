@@ -1,7 +1,7 @@
 /*
 
   This file is a part of JRTPLIB
-  Copyright (c) 1999-2016 Jori Liesenborgs
+  Copyright (c) 1999-2017 Jori Liesenborgs
 
   Contact: jori.liesenborgs@gmail.com
 
@@ -52,6 +52,7 @@ class RTCPPacket;
 /** Represents an RTCP compound packet. */
 class JRTPLIB_IMPORTEXPORT RTCPCompoundPacket : public RTPMemoryObject
 {
+	JRTPLIB_NO_COPY(RTCPCompoundPacket)
 public:
 	/** Creates an RTCPCompoundPacket instance from the data in \c rawpack, installing a memory manager if specified. */
 	RTCPCompoundPacket(RTPRawPacket &rawpack, RTPMemoryManager *memmgr = 0);
@@ -77,7 +78,7 @@ public:
 	uint8_t *GetCompoundPacketData()						{ return compoundpacket; }
 
 	/** Returns the size of the entire RTCP compound packet. */
-	size_t GetCompoundPacketLength()						{ return compoundpacketlength; }
+	size_t GetCompoundPacketLength() const					{ return compoundpacketlength; }
 
 	/** Starts the iteration over the individual RTCP packets in the RTCP compound packet. */
 	void GotoFirstPacket()									{ rtcppackit = rtcppacklist.begin(); }

@@ -1,7 +1,7 @@
 /*
 
   This file is a part of JRTPLIB
-  Copyright (c) 1999-2016 Jori Liesenborgs
+  Copyright (c) 1999-2017 Jori Liesenborgs
 
   Contact: jori.liesenborgs@gmail.com
 
@@ -256,6 +256,7 @@ public:
  */
 class JRTPLIB_IMPORTEXPORT RTPUDPv4Transmitter : public RTPTransmitter
 {
+	JRTPLIB_NO_COPY(RTPUDPv4Transmitter)
 public:
 	RTPUDPv4Transmitter(RTPMemoryManager *mgr);
 	~RTPUDPv4Transmitter();

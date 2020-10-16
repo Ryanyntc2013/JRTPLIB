@@ -1,7 +1,7 @@
 /*
 
   This file is a part of JRTPLIB
-  Copyright (c) 1999-2016 Jori Liesenborgs
+  Copyright (c) 1999-2017 Jori Liesenborgs
 
   Contact: jori.liesenborgs@gmail.com
 
@@ -79,6 +79,7 @@ class RTCPAPPPacket;
  */
 class JRTPLIB_IMPORTEXPORT RTPSession : public RTPMemoryObject
 {
+	JRTPLIB_NO_COPY(RTPSession)
 public:
 	/** Constructs an RTPSession instance, optionally using a specific instance of a random
 	 *  number generator, and optionally installing a memory manager. 

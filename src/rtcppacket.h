@@ -1,7 +1,7 @@
 /*
 
   This file is a part of JRTPLIB
-  Copyright (c) 1999-2016 Jori Liesenborgs
+  Copyright (c) 1999-2017 Jori Liesenborgs
 
   Contact: jori.liesenborgs@gmail.com
 
@@ -49,6 +49,7 @@ class RTCPCompoundPacket;
 /** Base class for specific types of RTCP packets. */
 class JRTPLIB_IMPORTEXPORT RTCPPacket 
 {
+	JRTPLIB_NO_COPY(RTCPPacket)
 public:
 	/** Identifies the specific kind of RTCP packet. */
 	enum PacketType 

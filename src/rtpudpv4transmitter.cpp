@@ -1,7 +1,7 @@
 /*
 
   This file is a part of JRTPLIB
-  Copyright (c) 1999-2016 Jori Liesenborgs
+  Copyright (c) 1999-2017 Jori Liesenborgs
 
   Contact: jori.liesenborgs@gmail.com
 
@@ -49,8 +49,6 @@
 #include <iostream>
 
 #include "rtpdebug.h"
-
-using namespace std;
 
 #define RTPUDPV4TRANS_MAXPACKSIZE							65535
 #define RTPUDPV4TRANS_IFREQBUFSIZE							8192
@@ -168,7 +166,7 @@ int GetAutoSockets(uint32_t bindIP, bool allowOdd, bool rtcpMux,
 {
 	const int maxAttempts = 1024;
 	int attempts = 0;
-	vector<SocketType> toClose;
+	std::vector<SocketType> toClose;
 
 	while (attempts++ < maxAttempts)
 	{

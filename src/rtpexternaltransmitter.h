@@ -1,7 +1,7 @@
 /*
 
   This file is a part of JRTPLIB
-  Copyright (c) 1999-2016 Jori Liesenborgs
+  Copyright (c) 1999-2017 Jori Liesenborgs
 
   Contact: jori.liesenborgs@gmail.com
 
@@ -139,6 +139,7 @@ private:
  */
 class JRTPLIB_IMPORTEXPORT RTPExternalTransmitter : public RTPTransmitter
 {
+	JRTPLIB_NO_COPY(RTPExternalTransmitter)
 public:
 	RTPExternalTransmitter(RTPMemoryManager *mgr);
 	~RTPExternalTransmitter();
@@ -205,6 +206,7 @@ private:
 	int headersize;
 
 	RTPAbortDescriptors m_abortDesc;
+	int m_abortCount;
 #ifdef RTP_SUPPORT_THREAD
 	jthread::JMutex mainmutex,waitmutex;
 	int threadsafe;

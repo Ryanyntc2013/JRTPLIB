@@ -1,7 +1,7 @@
 /*
 
   This file is a part of JRTPLIB
-  Copyright (c) 1999-2016 Jori Liesenborgs
+  Copyright (c) 1999-2017 Jori Liesenborgs
 
   Contact: jori.liesenborgs@gmail.com
 
@@ -69,7 +69,7 @@ static RTPErrorInfo ErrorDescriptions[]=
 	{ ERR_RTP_PACKBUILD_INVALIDMAXPACKETSIZE, "The specified maximum packet size for the RTP packet builder is invalid"},
 	{ ERR_RTP_PACKBUILD_NOTINIT, "The RTP packet builder is not initialized"},
 	{ ERR_RTP_PACKET_BADPAYLOADTYPE, "Invalid payload type"},
-	{ ERR_RTP_PACKET_DATAEXCEEDSMAXSIZE, "Tried to create an RTP packet which whould exceed the specified maximum packet size"},
+	{ ERR_RTP_PACKET_DATAEXCEEDSMAXSIZE, "Tried to create an RTP packet which would exceed the specified maximum packet size"},
 	{ ERR_RTP_PACKET_EXTERNALBUFFERNULL, "Illegal value (null) passed as external buffer for the RTP packet"},
 	{ ERR_RTP_PACKET_ILLEGALBUFFERSIZE, "Illegal buffer size specified for the RTP packet"},
 	{ ERR_RTP_PACKET_INVALIDPACKET, "Invalid RTP packet format"},
@@ -117,7 +117,7 @@ static RTPErrorInfo ErrorDescriptions[]=
 	{ ERR_RTP_SOURCES_ILLEGALSDESTYPE, "Illegal SDES type specified for processing into the source table"},
 	{ ERR_RTP_SOURCES_SSRCEXISTS, "Can't create own SSRC because this SSRC identifier is already in the source table"},
 	{ ERR_RTP_UDPV4TRANS_ALREADYCREATED, "The transmitter was already created"},
-	{ ERR_RTP_UDPV4TRANS_ALREADYINIT, "The transmitter was already initialize"},
+	{ ERR_RTP_UDPV4TRANS_ALREADYINIT, "The transmitter was already initialized"},
 	{ ERR_RTP_UDPV4TRANS_ALREADYWAITING, "The transmitter is already waiting for incoming data"},
 	{ ERR_RTP_UDPV4TRANS_CANTBINDRTCPSOCKET, "The 'bind' call for the RTCP socket failed"},
 	{ ERR_RTP_UDPV4TRANS_CANTBINDRTPSOCKET, "The 'bind' call for the RTP socket failed"},
@@ -128,7 +128,7 @@ static RTPErrorInfo ErrorDescriptions[]=
 	{ ERR_RTP_UDPV4TRANS_CANTSETRTPRECEIVEBUF, "Couldn't set the receive buffer size for the RTP socket"},
 	{ ERR_RTP_UDPV4TRANS_CANTSETRTPTRANSMITBUF, "Couldn't set the transmission buffer size for the RTP socket"},
 	{ ERR_RTP_UDPV4TRANS_COULDNTJOINMULTICASTGROUP, "Unable to join the specified multicast group"},
-	{ ERR_RTP_UDPV4TRANS_DIFFERENTRECEIVEMODE, "The function called doens't match the current receive mode"},
+	{ ERR_RTP_UDPV4TRANS_DIFFERENTRECEIVEMODE, "The function called doesn't match the current receive mode"},
 	{ ERR_RTP_UDPV4TRANS_ILLEGALPARAMETERS, "Illegal parameters type passed to the transmitter"},
 	{ ERR_RTP_UDPV4TRANS_INVALIDADDRESSTYPE, "Specified address type isn't compatible with this transmitter"},
 	{ ERR_RTP_UDPV4TRANS_NOLOCALIPS, "Couldn't determine the local host name since the local IP list is empty"},
@@ -141,7 +141,7 @@ static RTPErrorInfo ErrorDescriptions[]=
 	{ ERR_RTP_UDPV4TRANS_PORTBASENOTEVEN, "The specified port base is not an even number"},
 	{ ERR_RTP_UDPV4TRANS_SPECIFIEDSIZETOOBIG, "The maximum packet size is too big for this transmitter"},
 	{ ERR_RTP_UDPV6TRANS_ALREADYCREATED, "The transmitter was already created"},
-	{ ERR_RTP_UDPV6TRANS_ALREADYINIT, "The transmitter was already initialize"},
+	{ ERR_RTP_UDPV6TRANS_ALREADYINIT, "The transmitter was already initialized"},
 	{ ERR_RTP_UDPV6TRANS_ALREADYWAITING, "The transmitter is already waiting for incoming data"},
 	{ ERR_RTP_UDPV6TRANS_CANTBINDRTCPSOCKET, "The 'bind' call for the RTCP socket failed"},
 	{ ERR_RTP_UDPV6TRANS_CANTBINDRTPSOCKET, "The 'bind' call for the RTP socket failed"},
@@ -152,7 +152,7 @@ static RTPErrorInfo ErrorDescriptions[]=
 	{ ERR_RTP_UDPV6TRANS_CANTSETRTPRECEIVEBUF, "Couldn't set the receive buffer size for the RTP socket"},
 	{ ERR_RTP_UDPV6TRANS_CANTSETRTPTRANSMITBUF, "Couldn't set the transmission buffer size for the RTP socket"},
 	{ ERR_RTP_UDPV6TRANS_COULDNTJOINMULTICASTGROUP, "Unable to join the specified multicast group"},
-	{ ERR_RTP_UDPV6TRANS_DIFFERENTRECEIVEMODE, "The function called doens't match the current receive mode"},
+	{ ERR_RTP_UDPV6TRANS_DIFFERENTRECEIVEMODE, "The function called doesn't match the current receive mode"},
 	{ ERR_RTP_UDPV6TRANS_ILLEGALPARAMETERS, "Illegal parameters type passed to the transmitter"},
 	{ ERR_RTP_UDPV6TRANS_INVALIDADDRESSTYPE, "Specified address type isn't compatible with this transmitter"},
 	{ ERR_RTP_UDPV6TRANS_NOLOCALIPS, "Couldn't determine the local host name since the local IP list is empty"},
@@ -168,10 +168,10 @@ static RTPErrorInfo ErrorDescriptions[]=
 	{ ERR_RTP_SDES_MAXPRIVITEMS,"The maximum number of SDES private item prefixes was reached"},
 	{ ERR_RTP_INTERNALSOURCEDATA_INVALIDPROBATIONTYPE,"An invalid probation type was specified"},
 	{ ERR_RTP_FAKETRANS_ALREADYCREATED, "The transmitter was already created"},
-	{ ERR_RTP_FAKETRANS_ALREADYINIT, "The transmitter was already initialize"},
+	{ ERR_RTP_FAKETRANS_ALREADYINIT, "The transmitter was already initialized"},
 	{ ERR_RTP_FAKETRANS_CANTINITMUTEX, "Failed to initialize a mutex used by the transmitter"},
 	{ ERR_RTP_FAKETRANS_COULDNTJOINMULTICASTGROUP, "Unable to join the specified multicast group"},
-	{ ERR_RTP_FAKETRANS_DIFFERENTRECEIVEMODE, "The function called doens't match the current receive mode"},
+	{ ERR_RTP_FAKETRANS_DIFFERENTRECEIVEMODE, "The function called doesn't match the current receive mode"},
 	{ ERR_RTP_FAKETRANS_ILLEGALPARAMETERS, "Illegal parameters type passed to the transmitter"},
 	{ ERR_RTP_FAKETRANS_INVALIDADDRESSTYPE, "Specified address type isn't compatible with this transmitter"},
 	{ ERR_RTP_FAKETRANS_NOLOCALIPS, "Couldn't determine the local host name since the local IP list is empty"},
@@ -228,6 +228,23 @@ static RTPErrorInfo ErrorDescriptions[]=
 	{ ERR_RTP_SELECT_ERRORINSELECT, "Error in the call to 'select'" },
 	{ ERR_RTP_SELECT_SOCKETDESCRIPTORTOOLARGE, "A socket descriptor value is too large for a call to 'select' (exceeds FD_SETSIZE)" },
 	{ ERR_RTP_SELECT_ERRORINPOLL, "Error in the call to 'poll' or 'WSAPoll'" },
+	{ ERR_RTP_TCPTRANS_NOTINIT, "The TCP transmitter is not yet initialized" },
+	{ ERR_RTP_TCPTRANS_ALREADYINIT, "The TCP transmitter is already initialized" },
+	{ ERR_RTP_TCPTRANS_NOTCREATED, "The TCP transmitter is not yet created" },
+	{ ERR_RTP_TCPTRANS_ALREADYCREATED, "The TCP transmitter is already created" },
+	{ ERR_RTP_TCPTRANS_ILLEGALPARAMETERS, "The parameters for the TCP transmitter are invalid" },
+	{ ERR_RTP_TCPTRANS_CANTINITMUTEX, "Unable to initialize a mutex during the initialization of the TCP transmitter" },
+	{ ERR_RTP_TCPTRANS_ALREADYWAITING, "The TCP transmitter is already waiting for data" },
+	{ ERR_RTP_TCPTRANS_INVALIDADDRESSTYPE, "The address specified is not a valid address for the TCP transmitter" },
+	{ ERR_RTP_TCPTRANS_NOSOCKETSPECIFIED, "No socket was specified in the address used for the TCP transmitter" },
+	{ ERR_RTP_TCPTRANS_NOMULTICASTSUPPORT, "The TCP transmitter does not support multicasting" },
+	{ ERR_RTP_TCPTRANS_RECEIVEMODENOTSUPPORTED, "The TCP transmitter does not support receive modes other than 'accept all'" },
+	{ ERR_RTP_TCPTRANS_SPECIFIEDSIZETOOBIG, "The maximum packet size for the TCP transmitter is limited to 64KB" },
+	{ ERR_RTP_TCPTRANS_NOTWAITING, "The TCP transmitter is not waiting for data" },
+	{ ERR_RTP_TCPTRANS_SOCKETALREADYINDESTINATIONS, "The specified destination address (socket) was already added to the destination list of the TCP transmitter" },
+	{ ERR_RTP_TCPTRANS_SOCKETNOTFOUNDINDESTINATIONS, "The specified destination address (socket) was not found in the list of destinations of the TCP transmitter" },
+	{ ERR_RTP_TCPTRANS_ERRORINSEND, "An error occurred in the TCP transmitter while sending a packet" },
+	{ ERR_RTP_TCPTRANS_ERRORINRECV, "An error occurred in the TCP transmitter while receiving a packet" },
 	{ 0,0 }
 };
 
